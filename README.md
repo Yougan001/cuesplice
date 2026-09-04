@@ -4,9 +4,23 @@ Retiming SRT and WebVTT subtitles after removing sections from a video.
 
 A fixed subtitle offset works until you cut something out of the middle. CueSplice takes deleted ranges measured on the original video, removes their elapsed time, and moves later subtitles into place. Cues crossing a cut are trimmed or split; completely removed cues are listed in the change report.
 
-## Current stage
+**[Open the editor](https://yougan001.github.io/cuesplice/)** · [中文说明](README.zh-CN.md)
 
-The dependency-free timeline engine and regression tests are available. The browser editor is under development and will follow in a separate update.
+![CueSplice showing original subtitles, deleted ranges and the resulting cue-by-cue report](docs/images/workspace.png)
+
+## Use it
+
+1. Import or paste the original `.srt` / `.vtt` file.
+2. Enter the ranges removed from the original video, or import a two-column cut list.
+3. Apply cuts. Review **Split** and **Trimmed** cues, then download the edited subtitles and optional JSON change report.
+
+No account, upload service or video file is needed. Files are processed in the browser. The page must load once; offline page loading is not currently supported.
+
+The sample contains six original cues: one unchanged, two shifted, one trimmed, one removed and one split into two. Its cut list removes 7.500 seconds in total.
+
+## Use the engine directly
+
+The timeline module has no runtime dependencies.
 
 ```js
 import { retime, serializeSubtitles } from './core/timeline.mjs';
@@ -21,6 +35,21 @@ Run the core tests with Node.js 22 or newer:
 ```sh
 node --test tests/*.test.mjs
 ```
+
+## Develop the editor
+
+```sh
+npm ci
+npm run dev
+npm test
+npm run typecheck
+npm run lint
+npm run build
+```
+
+The editor uses React, TypeScript, Vinext and shadcn/ui. GitHub Actions builds a static export and publishes `dist/client/cuesplice` to Pages. The comparison engine remains independent of the interface.
+
+On this Windows environment, the Vinext export command can hit a Node/libuv shutdown assertion after producing its output. That is not treated as a successful local build; the Linux Pages workflow is the release build gate. See [validation notes](docs/testing.md).
 
 ## Timing rules
 
