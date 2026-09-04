@@ -1,6 +1,5 @@
 'use client';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { flushSync } from 'react-dom';
+import { useCallback, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   Scissors,
@@ -31,7 +30,6 @@ import {
 } from '@/core/timeline.mjs';
 import { SAMPLE_SUBTITLES, SAMPLE_CUTS } from '@/lib/sample';
 import { saveText } from '@/lib/download';
-import { registerTimelineTools } from '@/lib/browser-tools';
 
 type Report = ReturnType<typeof retime>;
 const initial = retime(SAMPLE_SUBTITLES, SAMPLE_CUTS);
@@ -103,11 +101,9 @@ export default function Home() {
     [reading, setReading] = useState(false);
   const subtitleInput = useRef<HTMLInputElement>(null),
     cutsInput = useRef<HTMLInputElement>(null);
-  const importRevision = useRef(0),
-    currentReport = useRef<Report | null>(initial);
+  const importRevision = useRef(0);
   const calculate = useCallback((text: string, ranges: string) => {
     const result = retime(text, ranges);
-    currentReport.current = result;
     setReport(result);
     setPage(0);
     setError('');
@@ -118,7 +114,6 @@ export default function Home() {
     importRevision.current++;
     setReading(false);
     setReport(null);
-    currentReport.current = null;
     setError('');
     setNotice('');
     setPage(0);
@@ -128,7 +123,6 @@ export default function Home() {
       calculate(source, cuts);
     } catch (e) {
       setReport(null);
-      currentReport.current = null;
       setError((e as Error).message);
       setNotice('');
     }
@@ -168,7 +162,6 @@ export default function Home() {
         setFilename(file.name);
       } else setCuts(text);
       setReport(null);
-      currentReport.current = null;
       setPage(0);
       setError('');
     } catch (e) {
@@ -198,29 +191,6 @@ export default function Home() {
     );
     setNotice('Download requested. Your original file has not been changed.');
   }
-  useEffect(
-    () =>
-      registerTimelineTools({
-        apply: (text, ranges) => {
-          const result = retime(text, ranges);
-          flushSync(() => {
-            importRevision.current++;
-            setReading(false);
-            setSource(text);
-            setCuts(ranges);
-            setFilename('subtitles.' + result.format);
-            currentReport.current = result;
-            setReport(result);
-            setPage(0);
-            setError('');
-            setNotice('');
-          });
-          return result;
-        },
-        read: () => currentReport.current,
-      }),
-    [calculate],
-  );
   const filtered =
     report?.changes.filter((c) => filter === 'all' || c.status === filter) ??
     [];
