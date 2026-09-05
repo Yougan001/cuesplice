@@ -1,0 +1,35 @@
+name: Timing or editor problem
+description: Share a small subtitle example and the exact cut ranges
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: Use invented text and a few cues. Do not attach private video or a complete third-party subtitle file. English and Chinese are welcome.
+  - type: textarea
+    id: subtitles
+    attributes:
+      label: Minimal SRT or WebVTT input
+      description: Paste the cues that reproduce the problem, or describe the steps for a layout-only issue.
+    validations:
+      required: true
+  - type: textarea
+    id: cuts
+    attributes:
+      label: Deleted ranges on the original video timeline
+      description: Include the exact cut list and whether you imported it or pasted it.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and actual result
+      description: For timing problems, show the expected output timestamps and the actual exported timestamps.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Version and environment
+      placeholder: "Release/commit, OS, browser version or Node.js version"
+    validations:
+      required: true

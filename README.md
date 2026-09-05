@@ -4,7 +4,7 @@ Retiming SRT and WebVTT subtitles after removing sections from a video.
 
 A fixed subtitle offset works until you cut something out of the middle. CueSplice takes deleted ranges measured on the original video, removes their elapsed time, and moves later subtitles into place. Cues crossing a cut are trimmed or split; completely removed cues are listed in the change report.
 
-**[Open the editor](https://yougan001.github.io/cuesplice/)** · [中文说明](README.zh-CN.md)
+**[Open the editor](https://yougan001.github.io/cuesplice/)** · [中文说明](README.zh-CN.md) · [Releases](https://github.com/Yougan001/cuesplice/releases)
 
 ![CueSplice showing original subtitles, deleted ranges and the resulting cue-by-cue report](docs/images/workspace.png)
 
@@ -47,7 +47,7 @@ npm run lint
 npm run build
 ```
 
-The editor uses React, TypeScript, Vinext and shadcn/ui. GitHub Actions builds a static export and publishes `dist/client/cuesplice` to Pages. The comparison engine remains independent of the interface.
+The editor uses React, TypeScript, Vinext and shadcn/ui. GitHub Actions builds a static export and publishes `dist/client/cuesplice` to Pages. The timeline engine remains independent of the interface.
 
 On this Windows environment, the Vinext export command can hit a Node/libuv shutdown assertion after producing its output. That is not treated as a successful local build; the Linux Pages workflow is the release build gate. See [validation notes](docs/testing.md).
 
@@ -62,6 +62,10 @@ On this Windows environment, the Vinext export command can hit a Node/libuv shut
 Supported: UTF-8 SRT and standalone WebVTT, multiline text, WebVTT cue settings and metadata. Limits: 2 million text characters, 20,000 cues, 500 cut ranges, 100,000 output fragments. File-size limits are checked separately by the browser importer.
 
 Not supported: speed ramps, transitions that change timing, EDL/frame-based imports, ASS/SSA styling, WebVTT inline karaoke timestamps or external timestamp maps. This is not a video editor or a subtitle translation tool.
+
+## Contribute
+
+Found a timing problem? [Share a minimal example](https://github.com/Yougan001/cuesplice/issues/new?template=timing-problem.yml). See the [contribution guide](CONTRIBUTING.md) for test cases and development checks.
 
 ## License
 
